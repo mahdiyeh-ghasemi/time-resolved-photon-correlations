@@ -67,6 +67,7 @@ The computational implementation was examined through several numerical tests:
 - Positivity of the calculated second-order correlation within numerical tolerance.
 - Convergence with respect to temporal grid refinement.
 - Weak-excitation scaling of population and photon correlations.
+- Sensitivity of the numerical results to solver tolerances.
 
 For weak excitation, the numerical results are consistent with
 
@@ -77,6 +78,30 @@ G_{\max}^{(2)}\propto A^4,
 $$
 
 where $A$ is the Gaussian pulse area.
+
+### Solver Tolerance Sensitivity
+
+The solver tolerance sensitivity was tested using three absolute and relative tolerance settings:
+
+| Setting | Absolute tolerance | Relative tolerance |
+|---|---:|---:|
+| Default | $10^{-8}$ | $10^{-6}$ |
+| Tight | $10^{-10}$ | $10^{-8}$ |
+| Strict | $10^{-12}$ | $10^{-10}$ |
+
+The maximum absolute difference in the second-order correlation relative to the default setting was approximately $2.39\times10^{-9}$ for both tighter settings. The maximum relative difference was approximately $8.6\times10^{-5}$.
+
+The corresponding maximum population difference was below $2.9\times10^{-7}$.
+
+The tight and strict settings produced nearly identical results, indicating numerical stability with respect to further tightening of the solver tolerances for the parameters considered.
+
+The zero-delay condition,
+
+$$
+G^{(2)}(t,0)=0,
+$$
+
+was also satisfied to numerical precision for all three tolerance settings.
 
 ## Results
 
