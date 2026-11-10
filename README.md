@@ -56,8 +56,10 @@ The Lindblad dissipator is defined as
 
 $$
 \mathcal{D}[c]\rho
-=c\rho c^\dagger
--\frac{1}{2}\left\{c^\dagger c,\rho\right\}.
+=
+c\rho c^\dagger
+-
+\frac{1}{2}\left\{c^\dagger c,\rho\right\}
 $$
 
 ## Numerical Validation
