@@ -102,7 +102,27 @@ where A is the Gaussian pulse area.
 
 ## Results
 
-The simulations generate the following figures:
+The simulations examine the population dynamics, emission intensity, and time-resolved second-order photon correlations of a driven two-level emitter.
+
+### Pulse-Duration Dependence
+
+A comparison was performed for Gaussian driving pulses with different temporal widths while keeping the pulse area constant at \(A=1\). The pulse amplitudes were adjusted according to
+
+\[
+\Omega_0 = \frac{A}{\sqrt{2\pi}\sigma}.
+\]
+
+For pulse widths \(\sigma = 0.5,\ 1.0,\ 2.0\), the maximum values of the time-resolved correlation function were approximately:
+
+| Pulse width \(\sigma\) | Maximum \(G^{(2)}\) | Peak delay |
+|---:|---:|---:|
+| 0.5 | \(3.17 \times 10^{-5}\) | 1.5 |
+| 1.0 | \(2.78 \times 10^{-5}\) | 2.5 |
+| 2.0 | \(2.13 \times 10^{-5}\) | 4.0 |
+
+Within this parameter regime, broader pulses produce a lower peak correlation value and shift the peak toward longer delays. These results illustrate how the temporal profile of the excitation can influence the emission correlations, even when the pulse area is held fixed.
+
+### Generated Figures
 
 | Figure | Description |
 |---|---|
@@ -113,4 +133,4 @@ The simulations generate the following figures:
 | `g2_pulse_duration_comparison.png` | Photon correlations for different pulse durations |
 | `g2_constant_area_comparison.png` | Correlation comparison at constant pulse area |
 
-All numerical simulations are implemented in Python using QuTiP, NumPy, SciPy, and Matplotlib.
+All simulations are implemented in Python using QuTiP, NumPy, SciPy, and Matplotlib.
