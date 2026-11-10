@@ -54,6 +54,8 @@ Here, $\gamma$ describes spontaneous emission, while $\gamma_\phi$ is the pure-d
 
 The Lindblad dissipator is defined as
 
+The Lindblad dissipator is defined as
+
 $$
 \mathcal{D}[c]\rho
 =
