@@ -55,11 +55,7 @@ Here, $\gamma$ describes spontaneous emission, while $\gamma_\phi$ is the pure-d
 The Lindblad dissipator is defined as:
 
 $$
-\mathcal{D}[c]\rho
-=
-c\rho c^\dagger
--
-\frac{1}{2}\left( c^\dagger c\,\rho + \rho\,c^\dagger c \right)
+\mathcal{D}[c]\rho = c\rho c^\dagger - \frac{1}{2}(c^\dagger c\rho + \rho c^\dagger c)
 $$
 
 ## Numerical Validation
