@@ -18,6 +18,7 @@ def solve_dynamics(
     gamma,
     gamma_phi=0.0,
     delta=0.0,
+    solver_options=None,
 ):
     """
     Solve the time-dependent Lindblad master equation
@@ -40,6 +41,6 @@ def solve_dynamics(
     c_ops,
     e_ops=[projector_e],
     args=args,
-    options={"store_states": True},
+    options={"store_states": True, **(solver_options or {})},
 )
     return result

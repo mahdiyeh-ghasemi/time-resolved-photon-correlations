@@ -18,6 +18,7 @@ def time_resolved_g2(
     gamma,
     gamma_phi=0.0,
     delta=0.0,
+    solver_options=None,
 ):
     """
     Calculate the time-resolved second-order photon correlation
@@ -51,6 +52,7 @@ def time_resolved_g2(
             c_ops,
             e_ops=[intensity_operator],
             args=args,
+            options=solver_options,
         )
 
         g2[i, :] = np.real(conditional_result.expect[0])
