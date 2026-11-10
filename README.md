@@ -15,7 +15,7 @@ How do the pulse duration and excitation strength affect the time-resolved photo
 - Model a driven two-level quantum emitter.
 - Implement time-dependent pulsed excitation.
 - Solve the open-system dynamics using the Lindblad master equation.
-- Calculate time-resolved first- and second-order photon correlation functions.
+- Calculate time-resolved second-order photon correlation functions.
 - Investigate the effects of pulse duration and excitation strength.
 
 ## Scope
@@ -24,7 +24,7 @@ The initial stage focuses on a minimal two-level emitter model. More complex sys
 
 ## Project Status
 
-Research model and computational framework under development.
+Research model and computational framework implemented and numerically validated.
 
 ## Theoretical Model
 
@@ -116,11 +116,10 @@ For pulse widths $\sigma=0.5,\ 1.0,\ 2.0$, the maximum values of the time-resolv
 | 1.0 | $2.78\times10^{-5}$ | 2.5 |
 | 2.0 | $2.13\times10^{-5}$ | 4.0 |
 
-Within this parameter regime, broader pulses produce a lower peak correlation value and shift the peak toward longer delays. These results illustrate how the temporal profile of the excitation can influence the emission correlations, even when the pulse area is held fixed.
+For the parameters considered here, increasing the pulse width reduces the peak correlation value and shifts the peak toward longer delays. These results illustrate how the temporal profile of the excitation can influence the emission correlations, even when the pulse area is held fixed.
 
 ![Population dynamics for different pulse durations](figures/pulse_duration_comparison.png)
 
-![Time-resolved photon correlations for different pulse durations](figures/g2_pulse_duration_comparison.png)
 
 ![Photon correlation comparison at constant pulse area](figures/g2_constant_area_comparison.png)
 
@@ -132,7 +131,6 @@ Within this parameter regime, broader pulses produce a lower peak correlation va
 | `photon_intensity.png` | Time-dependent emission intensity |
 | `time_resolved_g2.png` | Time-resolved second-order photon correlation |
 | `pulse_duration_comparison.png` | Population response for different pulse durations |
-| `g2_pulse_duration_comparison.png` | Photon correlations for different pulse durations |
 | `g2_constant_area_comparison.png` | Correlation comparison at constant pulse area |
 
 All simulations are implemented in Python using QuTiP, NumPy, SciPy, and Matplotlib.
