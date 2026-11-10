@@ -32,49 +32,49 @@ The system is modeled as a driven two-level quantum emitter with ground state \(
 
 In the rotating frame and using \(\hbar=1\), the Hamiltonian is
 
-\[
+$$
 H(t)=\Delta\sigma_+\sigma_-+
 \frac{\Omega(t)}{2}(\sigma_++\sigma_-)
-\]
+$$
 
 where the Gaussian driving pulse is
 
-\[
+$$
 \Omega(t)=\Omega_0
 \exp\left[-\frac{(t-t_0)^2}{2\sigma^2}\right].
-\]
+$$
 
 The open-system dynamics are described by the Lindblad master equation:
 
-\[
+$$
 \dot{\rho}=-i[H(t),\rho]
 +\gamma\mathcal{D}[\sigma_-]\rho
 +\frac{\gamma_\phi}{2}\mathcal{D}[\sigma_z]\rho.
-\]
+$$
 
 Here, \(\gamma\) describes spontaneous emission, while \(\gamma_\phi\) is the pure-dephasing rate.
 
 The Lindblad dissipator is defined as
 
-\[
+$$
 \mathcal{D}[c]\rho=c\rho c^\dagger-\frac{1}{2}\left\{c^\dagger c,\rho\right\}.
-\]
+$$
 
 ## Photon Correlation Function
 
 The emitted field is represented by the collapse operator
 
-\[
+$$
 L=\sqrt{\gamma}\sigma_-.
-\]
+$$
 
 The main observable is the time-resolved second-order photon correlation:
 
-\[
+$$
 G^{(2)}(t,\tau)=
 \langle L^\dagger(t)L^\dagger(t+\tau)
 L(t+\tau)L(t)\rangle.
-\]
+$$
 
 It is evaluated using conditional density-matrix evolution following a photon detection at time t.
 
@@ -92,11 +92,11 @@ The computational implementation was examined through several numerical tests:
 
 For weak excitation, the numerical results are consistent with:
 
-\[
+$$
 P_e^{\max}\propto A^2,
 \qquad
 G_{\max}^{(2)}\propto A^4,
-\]
+$$
 
 where A is the Gaussian pulse area.
 
@@ -126,9 +126,9 @@ The second-order correlation function \(G^{(2)}(t,\tau)\) describes the time-dep
 
 A comparison was performed for Gaussian driving pulses with different temporal widths while keeping the pulse area constant at \(A=1\). The pulse amplitudes were adjusted according to
 
-\[
+$$
 \Omega_0 = \frac{A}{\sqrt{2\pi}\sigma}.
-\]
+$$
 
 For pulse widths \(\sigma = 0.5,\ 1.0,\ 2.0\), the maximum values of the time-resolved correlation function were approximately:
 
