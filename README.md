@@ -104,6 +104,24 @@ where A is the Gaussian pulse area.
 
 The simulations examine the population dynamics, emission intensity, and time-resolved second-order photon correlations of a driven two-level emitter.
 
+### Population Dynamics
+
+The time evolution of the excited-state population illustrates the emitter's response to the Gaussian driving pulse and its subsequent relaxation through spontaneous emission.
+
+![Excited-state population dynamics](figures/population_dynamics.png)
+
+### Photon Emission Intensity
+
+The emission intensity is obtained from the excited-state population and the spontaneous emission rate, illustrating the temporal profile of photon emission.
+
+![Time-dependent photon emission intensity](figures/photon_intensity.png)
+
+### Time-Resolved Photon Correlations
+
+The second-order correlation function \(G^{(2)}(t,\tau)\) describes the time-dependent photon-pair emission correlations following pulsed excitation.
+
+![Time-resolved second-order photon correlation](figures/time_resolved_g2.png)
+
 ### Pulse-Duration Dependence
 
 A comparison was performed for Gaussian driving pulses with different temporal widths while keeping the pulse area constant at \(A=1\). The pulse amplitudes were adjusted according to
@@ -121,6 +139,12 @@ For pulse widths \(\sigma = 0.5,\ 1.0,\ 2.0\), the maximum values of the time-re
 | 2.0 | \(2.13 \times 10^{-5}\) | 4.0 |
 
 Within this parameter regime, broader pulses produce a lower peak correlation value and shift the peak toward longer delays. These results illustrate how the temporal profile of the excitation can influence the emission correlations, even when the pulse area is held fixed.
+
+![Population dynamics for different pulse durations](figures/pulse_duration_comparison.png)
+
+![Time-resolved photon correlations for different pulse durations](figures/g2_pulse_duration_comparison.png)
+
+![Photon correlation comparison at constant pulse area](figures/g2_constant_area_comparison.png)
 
 ### Generated Figures
 
