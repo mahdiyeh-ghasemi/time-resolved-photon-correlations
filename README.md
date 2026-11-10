@@ -4,7 +4,7 @@
 
 This project investigates the time-resolved photon correlations emitted by a driven quantum emitter under pulsed excitation.
 
-The initial study will use a driven two-level quantum system as a minimal theoretical model. Its dynamics will be described using the Lindblad master equation, with particular attention to the temporal structure of second-order photon correlations.
+The initial study uses a driven two-level quantum system as a minimal theoretical model. Its dynamics are described using the Lindblad master equation, with particular attention to the temporal structure of second-order photon correlations.
 
 ## Research Question
 
@@ -36,7 +36,7 @@ $$
 H(t)=\Delta\sigma_+\sigma_-+\frac{\Omega(t)}{2}(\sigma_++\sigma_-).
 $$
 
-where the Gaussian driving pulse is
+The Gaussian driving pulse is
 
 $$
 \Omega(t)=\Omega_0\exp\left[-\frac{(t-t_0)^2}{2\sigma^2}\right].
@@ -54,14 +54,11 @@ Here, $\gamma$ describes spontaneous emission, while $\gamma_\phi$ is the pure-d
 
 The Lindblad dissipator is defined as
 
-The Lindblad dissipator is defined as
-
 $$
 \mathcal{D}[c]\rho
 =
 c\rho c^\dagger
--
-\frac{1}{2}\left\{c^\dagger c,\rho\right\}
+-\frac{1}{2}\left\{c^\dagger c,\rho\right\}.
 $$
 
 ## Numerical Validation
@@ -74,7 +71,7 @@ The computational implementation was examined through several numerical tests:
 - Convergence with respect to temporal grid refinement.
 - Weak-excitation scaling of population and photon correlations.
 
-For weak excitation, the numerical results are consistent with:
+For weak excitation, the numerical results are consistent with
 
 $$
 P_e^{\max}\propto A^2,
@@ -82,7 +79,7 @@ P_e^{\max}\propto A^2,
 G_{\max}^{(2)}\propto A^4,
 $$
 
-where A is the Gaussian pulse area.
+where $A$ is the Gaussian pulse area.
 
 ## Results
 
@@ -102,25 +99,25 @@ The emission intensity is obtained from the excited-state population and the spo
 
 ### Time-Resolved Photon Correlations
 
-The second-order correlation function \(G^{(2)}(t,\tau)\) describes the time-dependent photon-pair emission correlations following pulsed excitation.
+The second-order correlation function $G^{(2)}(t,\tau)$ describes the time-dependent photon-pair emission correlations following pulsed excitation.
 
 ![Time-resolved second-order photon correlation](figures/time_resolved_g2.png)
 
 ### Pulse-Duration Dependence
 
-A comparison was performed for Gaussian driving pulses with different temporal widths while keeping the pulse area constant at \(A=1\). The pulse amplitudes were adjusted according to
+A comparison was performed for Gaussian driving pulses with different temporal widths while keeping the pulse area constant at $A=1$. The pulse amplitudes were adjusted according to
 
 $$
-\Omega_0 = \frac{A}{\sqrt{2\pi}\sigma}.
+\Omega_0=\frac{A}{\sqrt{2\pi}\sigma}.
 $$
 
-For pulse widths \(\sigma = 0.5,\ 1.0,\ 2.0\), the maximum values of the time-resolved correlation function were approximately:
+For pulse widths $\sigma=0.5,\ 1.0,\ 2.0$, the maximum values of the time-resolved correlation function were approximately:
 
-| Pulse width \(\sigma\) | Maximum \(G^{(2)}\) | Peak delay |
+| Pulse width $\sigma$ | Maximum $G^{(2)}$ | Peak delay |
 |---:|---:|---:|
-| 0.5 | \(3.17 \times 10^{-5}\) | 1.5 |
-| 1.0 | \(2.78 \times 10^{-5}\) | 2.5 |
-| 2.0 | \(2.13 \times 10^{-5}\) | 4.0 |
+| 0.5 | $3.17\times10^{-5}$ | 1.5 |
+| 1.0 | $2.78\times10^{-5}$ | 2.5 |
+| 2.0 | $2.13\times10^{-5}$ | 4.0 |
 
 Within this parameter regime, broader pulses produce a lower peak correlation value and shift the peak toward longer delays. These results illustrate how the temporal profile of the excitation can influence the emission correlations, even when the pulse area is held fixed.
 
