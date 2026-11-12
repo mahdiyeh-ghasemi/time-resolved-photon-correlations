@@ -1,5 +1,7 @@
 # Time-Resolved Photon Correlations in Driven Quantum Systems
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24174348.svg)](https://doi.org/10.5281/zenodo.24174348)
+
 A numerical study of the time-dependent dynamics and second-order photon correlations of a coherently driven two-level quantum emitter.
 
 This project investigates how pulse duration, pulse area, and laser detuning affect the emitter population, photon emission, and time-resolved second-order correlation function. The system is modeled using the Lindblad master equation and simulated with Python and QuTiP.
