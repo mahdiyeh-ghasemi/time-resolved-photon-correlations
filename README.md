@@ -21,7 +21,9 @@ This project implements a time-dependent numerical model to investigate:
 
 The central quantity is the time-resolved second-order correlation function:
 
-$$G^{(2)}(t,\tau) = \gamma^2 \left\langle \sigma_+(t)\,\sigma_+(t+\tau)\,\sigma_-(t+\tau)\,\sigma_-(t) \right\rangle$$
+```math
+G^{(2)}(t,\tau) = \gamma^2 \left\langle \sigma_+(t)\,\sigma_+(t+\tau)\,\sigma_-(t+\tau)\,\sigma_-(t) \right\rangle
+```
 
 The calculations are performed for a driven two-level system using a time-dependent Hamiltonian and Markovian dissipation.
 
@@ -31,15 +33,21 @@ The calculations are performed for a driven two-level system using a time-depend
 
 The emitter is represented by two states:
 
-$$|g\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \qquad |e\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$$
+```math
+|g\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \qquad |e\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+```
 
 The lowering and raising operators are defined as:
 
-$$\sigma_- = |g\rangle\langle e|, \qquad \sigma_+ = |e\rangle\langle g|$$
+```math
+\sigma_- = |g\rangle\langle e|, \qquad \sigma_+ = |e\rangle\langle g|
+```
 
 The excited-state population is:
 
-$$P_e(t) = \langle e|\rho(t)|e\rangle$$
+```math
+P_e(t) = \langle e|\rho(t)|e\rangle
+```
 
 where $`\rho(t)`$ is the density matrix of the emitter.
 
@@ -47,7 +55,9 @@ where $`\rho(t)`$ is the density matrix of the emitter.
 
 The system is driven by a Gaussian pulse:
 
-$$\Omega(t) = \Omega_0 \exp\left[ -\frac{(t-t_0)^2}{2\sigma^2} \right]$$
+```math
+\Omega(t) = \Omega_0 \exp\left[ -\frac{(t-t_0)^2}{2\sigma^2} \right]
+```
 
 where:
 
@@ -57,15 +67,21 @@ where:
 
 The pulse area is defined by:
 
-$$A = \int_{-\infty}^{+\infty} \Omega(t)\,dt$$
+```math
+A = \int_{-\infty}^{+\infty} \Omega(t)\,dt
+```
 
 For the Gaussian pulse:
 
-$$A = \sqrt{2\pi}\,\Omega_0\,\sigma$$
+```math
+A = \sqrt{2\pi}\,\Omega_0\,\sigma
+```
 
 Therefore, at constant pulse area:
 
-$$\Omega_0 = \frac{A}{\sqrt{2\pi}\,\sigma}$$
+```math
+\Omega_0 = \frac{A}{\sqrt{2\pi}\,\sigma}
+```
 
 This relation is used to distinguish the effects of changing pulse duration from those of changing pulse amplitude.
 
@@ -73,29 +89,39 @@ This relation is used to distinguish the effects of changing pulse duration from
 
 In the rotating frame, the Hamiltonian is:
 
-$$H(t) = \Delta\,|e\rangle\langle e| + \frac{\Omega(t)}{2}\left(\sigma_+ + \sigma_-\right)$$
+```math
+H(t) = \Delta\,|e\rangle\langle e| + \frac{\Omega(t)}{2}\left(\sigma_+ + \sigma_-\right)
+```
 
 where $`\Delta`$ is the laser-emitter detuning.
 
 For resonant excitation:
 
-$$\Delta = 0$$
+```math
+\Delta = 0
+```
 
 ### 2.4 Lindblad Master Equation
 
 The time evolution of the density matrix is described by:
 
-$$\frac{d\rho}{dt} = -i\left[H(t),\rho\right] + \sum_j \left( L_j \rho L_j^\dagger - \frac{1}{2}\left\lbrace L_j^\dagger L_j, \rho \right\rbrace \right)$$
+```math
+\frac{d\rho}{dt} = -i\left[H(t),\rho\right] + \sum_j \left( L_j \rho L_j^\dagger - \frac{1}{2}\left\lbrace L_j^\dagger L_j, \rho \right\rbrace \right)
+```
 
 The radiative decay operator is:
 
-$$L_1 = \sqrt{\gamma}\,\sigma_-$$
+```math
+L_1 = \sqrt{\gamma}\,\sigma_-
+```
 
 where $`\gamma`$ is the spontaneous emission rate.
 
 When pure dephasing is included, its contribution is represented by:
 
-$$L_2 = \sqrt{\frac{\gamma_\phi}{2}}\,\sigma_z$$
+```math
+L_2 = \sqrt{\frac{\gamma_\phi}{2}}\,\sigma_z
+```
 
 where $`\gamma_\phi`$ is the pure-dephasing rate.
 
@@ -105,11 +131,15 @@ The simulations use the QuTiP master-equation solver to calculate the system dyn
 
 The instantaneous photon emission intensity is proportional to:
 
-$$I(t) = \gamma \langle \sigma_+\sigma_- \rangle$$
+```math
+I(t) = \gamma \langle \sigma_+\sigma_- \rangle
+```
 
 Equivalently:
 
-$$I(t) = \gamma P_e(t)$$
+```math
+I(t) = \gamma P_e(t)
+```
 
 This observable describes the time-dependent emission probability density up to the chosen detection-rate convention.
 
@@ -117,19 +147,25 @@ This observable describes the time-dependent emission probability density up to 
 
 The time-resolved second-order correlation function is calculated as:
 
-$$G^{(2)}(t,\tau) = \gamma^2 \left\langle \sigma_+(t)\,\sigma_+(t+\tau)\,\sigma_-(t+\tau)\,\sigma_-(t) \right\rangle$$
+```math
+G^{(2)}(t,\tau) = \gamma^2 \left\langle \sigma_+(t)\,\sigma_+(t+\tau)\,\sigma_-(t+\tau)\,\sigma_-(t) \right\rangle
+```
 
 Using the quantum regression approach, the calculation involves the conditional density operator following the first photon-detection event.
 
 The corresponding unnormalized conditional state is initialized as:
 
-$$\rho_c(t) = \sigma_-\,\rho(t)\,\sigma_+$$
+```math
+\rho_c(t) = \sigma_-\,\rho(t)\,\sigma_+
+```
 
 and subsequently evolved from $`t`$ to $`t+\tau`$.
 
 The correlation function is then obtained from the conditional excited-state population:
 
-$$G^{(2)}(t,\tau) = \gamma^2 \, \mathrm{Tr}\left[ \sigma_+\sigma_-\,\rho_c(t+\tau) \right]$$
+```math
+G^{(2)}(t,\tau) = \gamma^2 \, \mathrm{Tr}\left[ \sigma_+\sigma_-\,\rho_c(t+\tau) \right]
+```
 
 The unnormalized correlation function is retained throughout the analysis. It should not be confused with the normalized correlation function $`g^{(2)}`$.
 
@@ -180,7 +216,9 @@ The population increases during the interaction with the pulse and subsequently 
 
 The emission intensity follows the excited-state population through the radiative decay relation:
 
-$$I(t) = \gamma P_e(t)$$
+```math
+I(t) = \gamma P_e(t)
+```
 
 The resulting temporal profile provides information about the emission dynamics following pulsed excitation.
 
@@ -196,7 +234,9 @@ The calculated correlation map provides a representation of the temporal structu
 
 For an ideal two-level emitter, the zero-delay correlation vanishes:
 
-$$G^{(2)}(t,0) = 0$$
+```math
+G^{(2)}(t,0) = 0
+```
 
 This behavior reflects the inability of an ideal two-level emitter to emit two photons simultaneously.
 
@@ -225,7 +265,9 @@ The corresponding second-order correlation functions are compared below.
 
 For a constant pulse area, the peak Rabi frequency is adjusted according to:
 
-$$\Omega_0 = \frac{A}{\sqrt{2\pi}\,\sigma}$$
+```math
+\Omega_0 = \frac{A}{\sqrt{2\pi}\,\sigma}
+```
 
 This comparison isolates the influence of pulse duration under a fixed integrated driving strength.
 
@@ -245,11 +287,15 @@ These values describe the investigated numerical parameter set and should not be
 
 In the weak-excitation regime, the excited-state population approximately follows a quadratic dependence on the pulse area:
 
-$$P_e^{\max} \propto A^2$$
+```math
+P_e^{\max} \propto A^2
+```
 
 The second-order correlation amplitude exhibits a stronger dependence:
 
-$$G^{(2)}_{\max} \propto A^4$$
+```math
+G^{(2)}_{\max} \propto A^4
+```
 
 These relations provide useful consistency checks for the weak-driving regime.
 
