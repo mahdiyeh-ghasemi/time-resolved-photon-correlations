@@ -1,431 +1,510 @@
+
 # Time-Resolved Photon Correlations in Driven Quantum Systems
 
-A numerical study of the time-resolved emission dynamics and second-order photon correlations of a coherently driven two-level quantum emitter.
+A numerical study of the time-dependent dynamics and second-order photon correlations of a coherently driven two-level quantum emitter.
 
-The project uses a Lindblad master-equation approach to investigate how pulse duration, pulse amplitude, and frequency detuning affect the emitter population, photon emission intensity, and conditional second-order correlation dynamics.
+This project investigates how pulse duration, pulse area, and laser detuning affect the emitter population, photon emission, and time-resolved second-order correlation function. The system is modeled using the Lindblad master equation and simulated with Python and QuTiP.
 
-## Project Overview
+---
 
-This repository contains a reproducible numerical framework for studying a two-level emitter driven by a Gaussian laser pulse.
+## 1. Project Overview
 
-The main objectives are to:
+The interaction of a coherent optical pulse with a two-level quantum emitter provides a fundamental framework for studying quantum optical dynamics and photon statistics.
 
-- Simulate the time evolution of the excited-state population.
-- Calculate the time-dependent photon emission intensity.
-- Evaluate the conditional, unnormalized second-order correlation function \(G^{(2)}(t,\tau)\).
-- Investigate the influence of pulse duration and pulse amplitude.
-- Examine the effects of frequency detuning on population dynamics and photon correlations.
-- Compare correlation-profile shapes across different detunings and detection times.
-- Assess numerical reliability through solver-tolerance tests, temporal-grid refinement, and physical consistency checks.
+This project implements a time-dependent numerical model to investigate:
 
-## Theoretical Model
+- Excited-state population dynamics under pulsed excitation.
+- Time-dependent photon emission intensity.
+- Two-time, second-order photon correlations.
+- The influence of pulse duration and pulse area.
+- The dependence of the dynamics and correlations on laser detuning.
+- Numerical stability and convergence of the calculated observables.
 
-### Two-Level Quantum Emitter
+The central quantity is the time-resolved second-order correlation function:
 
-The system consists of a ground state \(|g\rangle\) and an excited state \(|e\rangle\).
+$$
+G^{(2)}(t,\tau)
+=
+\left\langle
+\sigma_+(t)
+\sigma_+(t+\tau)
+\sigma_-(t+\tau)
+\sigma_-(t)
+\right\rangle
+$$
 
-The emitter is driven by a time-dependent Gaussian pulse:
+The calculations are performed for a driven two-level system using a time-dependent Hamiltonian and Markovian dissipation.
 
-\[
-\Omega(t)=\Omega_0
-\exp\left[-\frac{(t-t_0)^2}{2\sigma^2}\right],
-\]
+## 2. Theoretical Model
+
+### 2.1 Two-Level Quantum Emitter
+
+The emitter is represented by two states:
+
+$$
+|g\rangle =
+\begin{pmatrix}
+1\\0
+\end{pmatrix},
+\qquad
+|e\rangle =
+\begin{pmatrix}
+0\\1
+\end{pmatrix}
+$$
+
+The lowering and raising operators are defined as:
+
+$$
+\sigma_- = |g\rangle\langle e|
+$$
+
+$$
+\sigma_+ = |e\rangle\langle g|
+$$
+
+The excited-state population is:
+
+$$
+P_e(t)=\langle e|\rho(t)|e\rangle
+$$
+
+where $\rho(t)$ is the density matrix of the emitter.
+
+### 2.2 Gaussian Pulse Excitation
+
+The system is driven by a Gaussian pulse:
+
+$$
+\Omega(t)=
+\Omega_0
+\exp\left[
+-\frac{(t-t_0)^2}{2\sigma^2}
+\right]
+$$
 
 where:
 
-- \(\Omega_0\) is the peak Rabi frequency.
-- \(t_0\) is the pulse-center time.
-- \(\sigma\) is the pulse-width parameter.
+- $\Omega_0$ is the peak Rabi frequency.
+- $t_0$ is the pulse center.
+- $\sigma$ determines the pulse duration.
 
-The pulse area is defined as
+The pulse area is defined by:
 
-\[
-A=\int_{-\infty}^{\infty}\Omega(t)\,dt
-=\sqrt{2\pi}\,\Omega_0\sigma.
-\]
+$$
+A=\int_{-\infty}^{+\infty}\Omega(t)\,dt
+$$
 
-### Hamiltonian
+For the Gaussian pulse:
 
-In the rotating frame and using \(\hbar=1\), the Hamiltonian is
+$$
+A=\sqrt{2\pi}\Omega_0\sigma
+$$
 
-\[
+Therefore, at constant pulse area:
+
+$$
+\Omega_0=
+\frac{A}{\sqrt{2\pi}\sigma}
+$$
+
+This relation is used to distinguish the effects of changing pulse duration from those of changing pulse amplitude.
+
+### 2.3 Time-Dependent Hamiltonian
+
+In the rotating frame, the Hamiltonian is:
+
+$$
 H(t)=
 \Delta |e\rangle\langle e|
-+\frac{\Omega(t)}{2}
-(\sigma_++\sigma_-),
-\]
++
+\frac{\Omega(t)}{2}
+\left(\sigma_++\sigma_-\right)
+$$
 
-where \(\Delta\) is the laser-emitter detuning and
+where $\Delta$ is the laser-emitter detuning.
 
-\[
-\sigma_+=|e\rangle\langle g|,
-\qquad
-\sigma_-=|g\rangle\langle e|.
-\]
+For resonant excitation:
 
-### Master Equation
+$$
+\Delta=0
+$$
 
-The density matrix evolves according to the Lindblad master equation:
+### 2.4 Lindblad Master Equation
 
-\[
+The time evolution of the density matrix is described by:
+
+$$
 \frac{d\rho}{dt}
-=-i[H(t),\rho]
-+\gamma\mathcal{D}[\sigma_-]\rho
-+\frac{\gamma_\phi}{2}
-\mathcal{D}[\sigma_z]\rho,
-\]
+=
+-i[H(t),\rho]
++
+\sum_j
+\left(
+L_j\rho L_j^\dagger
+-
+\frac{1}{2}
+\{L_j^\dagger L_j,\rho\}
+\right)
+$$
 
-with the dissipator defined as
+The radiative decay operator is:
 
-\[
-\mathcal{D}[C]\rho
-=C\rho C^\dagger
--\frac{1}{2}
-\left(C^\dagger C\rho+\rho C^\dagger C\right).
-\]
+$$
+L_1=\sqrt{\gamma}\sigma_-
+$$
 
-Here:
+where $\gamma$ is the spontaneous emission rate.
 
-- \(\gamma\) is the spontaneous-emission rate.
-- \(\gamma_\phi\) is the pure-dephasing parameter.
-- \(\sigma_z=|e\rangle\langle e|-|g\rangle\langle g|\).
+When pure dephasing is included, its contribution is represented by:
 
-The collapse operators implemented in the code are
+$$
+L_2=\sqrt{\frac{\gamma_\phi}{2}}\sigma_z
+$$
 
-\[
-C_1=\sqrt{\gamma}\,\sigma_-,
-\qquad
-C_2=\sqrt{\frac{\gamma_\phi}{2}}\,\sigma_z.
-\]
+where $\gamma_\phi$ is the pure-dephasing rate.
 
-The initial state is the ground-state density matrix:
+The simulations use the QuTiP master-equation solver to calculate the system dynamics.
 
-\[
-\rho(0)=|g\rangle\langle g|.
-\]
+### 2.5 Photon Emission Intensity
 
-### Excited-State Population and Photon Intensity
+The instantaneous photon emission intensity is proportional to:
 
-The excited-state population is
+$$
+I(t)=
+\gamma
+\langle\sigma_+\sigma_-\rangle
+$$
 
-\[
-P_e(t)=\langle e|\rho(t)|e\rangle.
-\]
+Equivalently:
 
-The photon emission intensity is calculated as
+$$
+I(t)=\gamma P_e(t)
+$$
 
-\[
-I(t)=\gamma P_e(t).
-\]
+This observable describes the time-dependent emission probability density up to the chosen detection-rate convention.
 
-### Time-Resolved Second-Order Correlations
+### 2.6 Second-Order Photon Correlations
 
-The conditional density matrix following a photon detection at time \(t\) is initialized as
+The time-resolved second-order correlation function is calculated as:
 
-\[
-\rho_{\mathrm{cond}}(t)
-=\sigma_-\rho(t)\sigma_+.
-\]
-
-The subsequent conditional evolution is used to calculate
-
-\[
+$$
 G^{(2)}(t,\tau)
 =
-\mathrm{Tr}
+\gamma^2
+\left\langle
+\sigma_+(t)
+\sigma_+(t+\tau)
+\sigma_-(t+\tau)
+\sigma_-(t)
+\right\rangle
+$$
+
+Using the quantum regression approach, the calculation involves the conditional density operator following the first photon-detection event.
+
+The corresponding unnormalized conditional state is initialized as:
+
+$$
+\rho_c(t)=
+\sigma_-\rho(t)\sigma_+
+$$
+
+and subsequently evolved from $t$ to $t+\tau$.
+
+The correlation function is then obtained from the conditional excited-state population:
+
+$$
+G^{(2)}(t,\tau)
+=
+\gamma^2
+\operatorname{Tr}
 \left[
-L^\dagger L\,\rho_{\mathrm{cond}}(t+\tau)
-\right],
-\qquad
-L=\sqrt{\gamma}\,\sigma_-.
-\]
+\sigma_+\sigma_-\rho_c(t+\tau)
+\right]
+$$
 
-In this implementation, \(G^{(2)}(t,\tau)\) is **unnormalized**. It is not divided by the product of the mean intensities, and therefore should not be interpreted as the normalized correlation function \(g^{(2)}(t,\tau)\).
+The unnormalized correlation function is retained throughout the analysis. It should not be confused with the normalized correlation function $g^{(2)}$.
 
-The calculation uses the conditional quantum state and subsequent master-equation evolution to resolve the dependence on both detection time \(t\) and delay \(\tau\).
+---
 
-## Numerical Implementation
+## 3. Numerical Implementation
 
-The simulations are implemented in Python using QuTiP's master-equation solver, `mesolve`.
+The project is organized into three main source modules.
 
-The code is organized into three core modules:
+| Module | Description |
+|---|---|
+| `src/model.py` | Defines the quantum states, operators, Hamiltonian, and physical parameters. |
+| `src/dynamics.py` | Calculates the time evolution of the density matrix and excited-state population. |
+| `src/correlations.py` | Calculates the time-resolved second-order photon correlation function. |
 
-- `src/model.py`: quantum states, operators, Gaussian pulse, Hamiltonian, collapse operators, and initial state.
-- `src/dynamics.py`: master-equation evolution and excited-state population.
-- `src/correlations.py`: conditional evolution and time-resolved second-order correlations.
+The simulation scripts are located in the `simulations/` directory. Generated figures are saved in `figures/`.
 
-The analysis scripts in `simulations/` use these shared modules to perform the parameter sweeps, numerical tests, and figure generation.
+### Main Numerical Parameters
 
-### Representative Parameters
+The baseline model uses the following parameter configuration:
 
-The baseline parameter set used in the main simulations is:
-
-| Parameter | Value | Description |
-|---|---:|---|
-| \(\Omega_0\) | 1.0 | Peak Rabi frequency |
-| \(t_0\) | 5.0 | Gaussian pulse center |
-| \(\sigma\) | 1.0 | Gaussian pulse width |
-| \(\gamma\) | 0.1 | Spontaneous-emission rate |
-| \(\gamma_\phi\) | 0.02 | Pure-dephasing parameter |
-| \(\Delta\) | 0.0 | Resonant baseline detuning |
-
-Unless otherwise specified, the main time-resolved calculations use 41 points over \(0\leq t\leq20\) and 41 points over \(0\leq\tau\leq20\).
-
-Some analyses use finer grids or extended time intervals. The parameter values are representative simulation settings, not universal physical constants.
-
-## Numerical Validation
-
-Several numerical checks are included to assess the reliability and physical consistency of the calculations.
-
-### Physical Consistency Checks
-
-`simulations/correlation_metrics.py` evaluates:
-
-1. Zero-delay correlation: \(G^{(2)}(t,0)\) should approach zero for the ideal two-level emitter.
-2. Non-negativity of the calculated correlation values within numerical tolerance.
-3. Physical bounds of the excited-state population.
-4. Decay of the excited-state population after the pulse.
-
-These checks are implemented with numerical tolerances to account for floating-point and solver errors.
-
-### Solver-Tolerance Sensitivity
-
-The solver is tested using three tolerance settings:
-
-| Setting | Absolute tolerance | Relative tolerance |
+| Parameter | Symbol | Value |
 |---|---:|---:|
-| Default | \(10^{-8}\) | \(10^{-6}\) |
-| Tight | \(10^{-10}\) | \(10^{-8}\) |
-| Strict | \(10^{-12}\) | \(10^{-10}\) |
+| Radiative decay rate | $\gamma$ | 1.0 |
+| Pure-dephasing rate | $\gamma_\phi$ | 0 |
+| Detuning | $\Delta$ | 0 |
+| Peak Rabi frequency | $\Omega_0$ | 1.0 |
+| Pulse center | $t_0$ | 5.0 |
+| Pulse width | $\sigma$ | 1.0 |
+| Detection-time interval | $t$ | 0–20 |
+| Delay interval | $\tau$ | 0–20 |
 
-The comparison shows that the tighter and stricter settings produce very similar results for the tested parameter set.
+The numerical time grids and solver tolerances are specified in the corresponding simulation scripts.
 
-The maximum absolute difference in the calculated correlation values relative to the default setting is approximately \(2.39\times10^{-9}\) for the tighter settings. The maximum population difference remains below \(2.9\times10^{-7}\).
+---
 
-### Temporal-Grid Refinement
+## 4. Simulation Results
 
-The project includes grid-refinement tests using 41, 81, and 161 points.
+### 4.1 Excited-State Population Dynamics
 
-A separate intensity-detuning convergence analysis compares 161-point and 321-point grids for the sampled maxima across the tested parameter combinations.
+The first simulation examines the time evolution of the excited-state population under Gaussian pulse excitation.
 
-The maximum relative differences between the sampled maxima are:
-
-| Quantity | Maximum relative difference |
-|---|---:|
-| Excited-state population | 0.26714% |
-| Unnormalized \(G^{(2)}\) | 0.02261% |
-
-These values describe the convergence of the sampled maxima in the tested calculations; they do not establish convergence of every point in the full two-dimensional correlation maps.
-
-### Weak-Excitation Scaling
-
-The weak-excitation analysis compares pulse areas of 0.4, 0.2, and 0.1.
-
-For the tested regime, the numerical results are examined against the expected scaling:
-
-\[
-P_e^{\max}\propto A^2,
-\qquad
-G_{\max}^{(2)}\propto A^4.
-\]
-
-This provides an additional consistency test of the numerical implementation.
-
-## Results
-
-### 1. Population Dynamics
-
-The excited-state population is calculated by solving the master equation over an extended time interval.
+The population increases during the interaction with the pulse and subsequently evolves under the influence of coherent dynamics and spontaneous emission.
 
 ![Excited-state population dynamics](figures/population_dynamics.png)
 
-### 2. Photon Emission Intensity
+### 4.2 Photon Emission Intensity
 
-The time-dependent photon emission intensity is obtained from
+The emission intensity follows the excited-state population through the radiative decay relation:
 
-\[
-I(t)=\gamma P_e(t).
-\]
+$$
+I(t)=\gamma P_e(t)
+$$
 
-![Photon emission intensity](figures/photon_intensity.png)
+The resulting temporal profile provides information about the emission dynamics following pulsed excitation.
 
-### 3. Time-Resolved Photon Correlations
+![Time-dependent photon emission intensity](figures/photon_intensity.png)
 
-The conditional, unnormalized second-order correlation function is evaluated over detection time and delay.
+### 4.3 Time-Resolved Second-Order Correlations
 
-![Time-resolved second-order correlation](figures/time_resolved_g2.png)
+The two-time correlation function describes the dependence of photon correlations on the detection time $t$ and the time delay $\tau$.
 
-### 4. Pulse-Duration Dependence
+The calculated correlation map provides a representation of the temporal structure of the emitted photon statistics.
 
-The effect of pulse duration is investigated using two complementary comparisons.
+![Time-resolved second-order photon correlation](figures/time_resolved_g2.png)
 
-The first comparison examines population dynamics for different Gaussian pulse widths at fixed peak amplitude.
+For an ideal two-level emitter, the zero-delay correlation vanishes:
 
-![Pulse duration comparison](figures/pulse_duration_comparison.png)
+$$
+G^{(2)}(t,0)=0
+$$
 
-The second comparison investigates the correlation response at constant pulse area \(A=1\), using
+This behavior reflects the inability of an ideal two-level emitter to emit two photons simultaneously.
 
-\[
-\Omega_0=\frac{1}{\sqrt{2\pi}\sigma}.
-\]
+### 4.4 Pulse-Duration Dependence
 
-The tested pulse widths are \(\sigma=0.5,\ 1.0,\ 2.0\).
+The pulse duration affects the temporal excitation profile and the subsequent photon-correlation dynamics.
 
-| Pulse width \(\sigma\) | Maximum \(G^{(2)}\) | Peak delay |
+Two complementary comparisons are considered:
+
+1. Changing pulse duration while keeping the peak Rabi frequency fixed.
+2. Changing pulse duration while keeping the pulse area fixed.
+
+The distinction is important because changing $\sigma$ at fixed $\Omega_0$ also changes the pulse area.
+
+#### Fixed Peak Rabi Frequency
+
+The following figure compares the dynamics for different pulse durations while maintaining the peak Rabi frequency.
+
+![Population dynamics for different pulse durations](figures/pulse_duration_comparison.png)
+
+The corresponding second-order correlation functions are compared below.
+
+![Second-order correlation for different pulse durations](figures/g2_pulse_duration_comparison.png)
+
+#### Fixed Pulse Area
+
+For a constant pulse area, the peak Rabi frequency is adjusted according to:
+
+$$
+\Omega_0=
+\frac{A}{\sqrt{2\pi}\sigma}
+$$
+
+This comparison isolates the influence of pulse duration under a fixed integrated driving strength.
+
+![Second-order correlation at constant pulse area](figures/g2_constant_area_comparison.png)
+
+The numerical results for the pulse-duration comparison are summarized below.
+
+| Pulse width $\sigma$ | Maximum $G^{(2)}$ | Delay at maximum |
 |---:|---:|---:|
-| 0.5 | \(3.17\times10^{-5}\) | 1.5 |
-| 1.0 | \(2.78\times10^{-5}\) | 2.5 |
-| 2.0 | \(2.13\times10^{-5}\) | 4.0 |
+| 0.5 | $3.17\times10^{-5}$ | 1.5 |
+| 1.0 | $2.78\times10^{-5}$ | 2.5 |
+| 2.0 | $2.13\times10^{-5}$ | 4.0 |
 
-![Constant-area correlation comparison](figures/g2_constant_area_comparison.png)
+These values describe the investigated numerical parameter set and should not be interpreted as universal properties of two-level emitters.
 
-![Pulse-duration correlation comparison](figures/g2_pulse_duration_comparison.png)
+### 4.5 Weak-Excitation Scaling
 
-### 5. Detuning Dependence
+In the weak-excitation regime, the excited-state population approximately follows a quadratic dependence on the pulse area:
 
-The influence of detuning is investigated using
+$$
+P_e^{\max}\propto A^2
+$$
 
-\[
+The second-order correlation amplitude exhibits a stronger dependence:
+
+$$
+G_{\max}^{(2)}\propto A^4
+$$
+
+These relations provide useful consistency checks for the weak-driving regime.
+
+### 4.6 Detuning Dependence
+
+The effect of laser-emitter detuning is investigated by varying the detuning relative to the radiative decay rate:
+
+$$
 \frac{\Delta}{\gamma}
-=
-0,\ 0.5,\ 1,\ 1.5,\ 2,\ 2.5,\ 3.
-\]
+$$
 
-The population and correlation maxima decrease as the detuning increases over this parameter range.
+The simulations compare the excited-state population and the second-order photon correlations for different detuning values.
 
-For the 41-point baseline sweep, the results are:
+#### Detuning and Second-Order Correlations
 
-| \(\Delta/\gamma\) | Maximum population | Maximum \(G^{(2)}\) |
-|---:|---:|---:|
-| 0.0 | 0.72324 | \(8.8308\times10^{-4}\) |
-| 0.5 | 0.72159 | \(8.8160\times10^{-4}\) |
-| 1.0 | 0.71668 | \(8.7718\times10^{-4}\) |
-| 1.5 | 0.70856 | \(8.6986\times10^{-4}\) |
-| 2.0 | 0.69855 | \(8.5971\times10^{-4}\) |
-| 2.5 | 0.68628 | \(8.4684\times10^{-4}\) |
-| 3.0 | 0.67158 | \(8.3139\times10^{-4}\) |
+![Detuning dependence of second-order correlations](figures/detuning_g2_comparison.png)
 
-At \(\Delta=3\gamma\), the maximum population decreases by approximately 7.14%, while the maximum unnormalized correlation decreases by approximately 5.85% relative to resonance.
+The correlation amplitude is also examined over a wider detuning range.
 
-The following figures show selected-detuning comparisons and the full detuning sweeps.
+![Second-order correlation sweep over detuning](figures/detuning_g2_sweep.png)
 
-![Detuning population comparison](figures/detuning_population_comparison.png)
+#### Detuning and Excited-State Population
 
-![Detuning correlation comparison](figures/detuning_g2_comparison.png)
+![Excited-state population for different detunings](figures/detuning_population_comparison.png)
 
-![Detuning population sweep](figures/detuning_population_sweep.png)
+The population response over the detuning sweep is shown below.
 
-![Detuning correlation sweep](figures/detuning_g2_sweep.png)
+![Excited-state population sweep over detuning](figures/detuning_population_sweep.png)
 
-### 6. Detuning Dependence of Correlation Structure
+For the investigated parameter range, the relative reductions at $\Delta/\gamma=3$ are approximately:
 
-Beyond the maximum correlation value, the project examines the shape of the correlation profiles.
+| Observable | Relative reduction |
+|---|---:|
+| Maximum excited-state population | 7.14% |
+| Maximum second-order correlation | 5.85% |
 
-Full time-delay correlation maps are calculated for
+These percentages refer to the specific baseline and detuning comparison used in the simulations.
 
-\[
-\frac{\Delta}{\gamma}=0,\ 1,\ 3.
-\]
+### 4.7 Detuning-Dependent Correlation Structure
 
-![Detuning-dependent correlation maps](figures/g2_detuning_maps.png)
+In addition to the maximum correlation amplitude, detuning can affect the temporal structure of the correlation function.
 
-The corresponding correlation profiles are compared at a selected detection time.
+The following maps compare the correlation distribution across detection times and delays.
+
+![Second-order correlation maps for different detunings](figures/g2_detuning_maps.png)
+
+The delay-dependent correlation profiles provide a complementary view of the temporal response.
 
 ![Detuning-dependent correlation profiles](figures/g2_detuning_profiles.png)
 
-### 7. Normalized Profile-Shape Comparison
+A normalized representation of the profiles is also examined to compare their shapes independently of their overall amplitudes.
 
-To separate changes in profile shape from changes in overall amplitude, each selected correlation profile is divided by its own maximum.
+![Normalized detuning-dependent correlation profiles](figures/g2_detuning_normalized_profiles.png)
 
-This is a profile-shape normalization for comparison purposes. It is **not** the standard intensity-normalized \(g^{(2)}\) function.
+This normalized profile comparison is a shape-analysis procedure and is not the same as calculating the conventional normalized $g^{(2)}$ function.
 
-The root-mean-square (RMS) difference from the resonant profile at \(t=5\) is:
+### 4.8 Detection-Time Dependence
 
-| \(\Delta/\gamma\) | RMS difference |
-|---:|---:|
-| 0 | 0 |
-| 1 | \(4.05\times10^{-4}\) |
-| 3 | \(3.64\times10^{-3}\) |
+The correlation function depends on both the first detection time and the subsequent delay.
 
-![Normalized correlation profiles](figures/g2_detuning_normalized_profiles.png)
+The following analysis examines how the correlation structure changes with the initial detection time.
 
-### 8. Detection-Time Dependence
+![Detection-time dependence of second-order correlations](figures/g2_detuning_time_dependence.png)
 
-The correlation-profile shape is also examined at different detection times:
+### 4.9 Pulse Amplitude and Detuning
 
-\[
-t=4,\ 5,\ 6,\ 7.
-\]
+The final comparison investigates the combined influence of driving strength and detuning on the excited-state population and second-order photon correlations.
 
-For the selected parameters, the RMS difference from the resonant profile generally decreases at later detection times.
+#### Excited-State Population
 
-![Detection-time dependence of correlation profiles](figures/g2_detuning_time_dependence.png)
+![Population dependence on driving intensity and detuning](figures/intensity_detuning_population.png)
 
-### 9. Pulse-Amplitude and Detuning Dependence
+#### Second-Order Correlations
 
-A finer 321-point temporal grid is used to investigate three peak pulse amplitudes:
+![Second-order correlation dependence on driving intensity and detuning](figures/intensity_detuning_g2.png)
 
-\[
-\Omega_0=0.5,\ 1.0,\ 2.0,
-\]
+These calculations provide a broader view of the interplay between coherent excitation and detuning-dependent emission dynamics.
 
-and three detuning ratios:
+---
 
-\[
-\frac{\Delta}{\gamma}=0,\ 1,\ 3.
-\]
+## 5. Numerical Validation
 
-The simulations use \(\gamma=0.1\), \(\gamma_\phi=0.02\), \(t_0=5\), and \(\sigma=1\), with strict solver tolerances.
+Numerical reliability is essential when evaluating time-dependent quantum correlations.
 
-The calculated maxima are:
+The project includes several validation procedures.
 
-| \(\Omega_0\) | \(\Delta/\gamma\) | Maximum population | Maximum \(G^{(2)}\) |
-|---:|---:|---:|---:|
-| 0.5 | 0 | 0.26527 | \(6.7035\times10^{-5}\) |
-| 0.5 | 1 | 0.26297 | \(6.6599\times10^{-5}\) |
-| 0.5 | 3 | 0.24531 | \(6.3226\times10^{-5}\) |
-| 1.0 | 0 | 0.72669 | \(8.8564\times10^{-4}\) |
-| 1.0 | 1 | 0.72051 | \(8.7990\times10^{-4}\) |
-| 1.0 | 3 | 0.67342 | \(8.3533\times10^{-4}\) |
-| 2.0 | 0 | 0.93153 | \(6.3853\times10^{-3}\) |
-| 2.0 | 1 | 0.92740 | \(6.3448\times10^{-3}\) |
-| 2.0 | 3 | 0.89515 | \(6.0302\times10^{-3}\) |
+### 5.1 Solver-Tolerance Comparison
 
-For this parameter set, increasing the pulse amplitude reduces the relative detuning sensitivity of the maximum excited-state population. The relative change in the maximum unnormalized correlation remains of a similar order across the tested amplitudes.
+The simulations are repeated using different numerical solver tolerances to evaluate the stability of the calculated observables.
 
-These observations are specific to the investigated model and parameter range.
+The comparison includes:
 
-![Population versus pulse amplitude and detuning](figures/intensity_detuning_population.png)
+- Default solver tolerances.
+- Tighter solver tolerances.
+- Strict solver tolerances.
 
-![Correlation versus pulse amplitude and detuning](figures/intensity_detuning_g2.png)
+The observed maximum differences in the tested calculations are approximately:
 
-## Repository Structure
+| Quantity | Maximum difference |
+|---|---:|
+| Absolute difference in $G^{(2)}$ | $2.39\times10^{-9}$ |
+| Relative difference in $G^{(2)}$ | $8.6\times10^{-5}$ |
+| Population difference | $2.9\times10^{-7}$ |
+
+These values characterize the tested numerical configurations.
+
+### 5.2 Time-Grid Refinement
+
+The effect of time-grid resolution is examined by comparing calculations using progressively finer grids.
+
+The tested grid sizes include:
+
+$$
+N=41,\quad 81,\quad 161,\quad 321
+$$
+
+For the comparison between the 161-point and 321-point grids, the maximum relative differences in the sampled maxima are approximately:
+
+| Observable | Maximum relative difference |
+|---|---:|
+| Excited-state population | 0.26714% |
+| Second-order correlation | 0.02261% |
+
+The results indicate numerical stability for the investigated observables and parameter ranges.
+
+### 5.3 Physical Consistency Checks
+
+The calculations are also examined for basic physical consistency:
+
+- The density matrix remains normalized.
+- The density matrix remains Hermitian.
+- The excited-state population remains within the physical interval:
+
+$$
+0\leq P_e(t)\leq 1
+$$
+
+- The calculated second-order correlation remains nonnegative within numerical accuracy.
+- The zero-delay correlation is consistent with antibunching for an ideal two-level emitter:
+
+$$
+G^{(2)}(t,0)=0
+$$
+
+These checks help identify numerical errors and inconsistencies in the simulation.
+
+---
+
+## 6. Repository Structure
 
 ```text
 time-resolved-photon-correlations/
-│
-├── src/
-│   ├── model.py
-│   ├── dynamics.py
-│   └── correlations.py
-│
-├── simulations/
-│   ├── convergence_test.py
-│   ├── correlation_metrics.py
-│   ├── detuning_comparison.py
-│   ├── detuning_sweep.py
-│   ├── g2_detuning_normalized.py
-│   ├── g2_detuning_structure.py
-│   ├── g2_detuning_time_dependence.py
-│   ├── g2_pulse_duration_comparison.py
-│   ├── intensity_detuning_analysis.py
-│   ├── intensity_detuning_convergence.py
-│   ├── photon_correlations.py
-│   ├── photon_intensity.py
-│   ├── population_dynamics.py
-│   ├── pulse_duration_comparison.py
-│   ├── solver_tolerance_test.py
-│   └── weak_excitation_test.py
 │
 ├── figures/
 │   ├── detuning_g2_comparison.png
@@ -437,4 +516,134 @@ time-resolved-photon-correlations/
 │   ├── g2_detuning_normalized_profiles.png
 │   ├── g2_detuning_profiles.png
 │   ├── g2_detuning_time_dependence.png
+│   ├── g2_pulse_duration_comparison.png
+│   ├── intensity_detuning_g2.png
+│   ├── intensity_detuning_population.png
+│   ├── photon_intensity.png
+│   ├── population_dynamics.png
+│   ├── pulse_duration_comparison.png
+│   └── time_resolved_g2.png
 │
+├── simulations/
+│   ├── detuning_comparison.py
+│   ├── g2_pulse_duration_comparison.py
+│   ├── g2_detuning_structure.py
+│   ├── g2_detuning_normalized.py
+│   ├── g2_detuning_time_dependence.py
+│   └── ...
+│
+├── src/
+│   ├── model.py
+│   ├── dynamics.py
+│   └── correlations.py
+│
+├── README.md
+├── requirements.txt
+├── LICENSE
+└── .gitignore
+```
+
+---
+
+## 7. Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/mahdiyeh-ghasemi/time-resolved-photon-correlations.git
+cd time-resolved-photon-correlations
+```
+
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+On Linux or macOS:
+
+```bash
+source .venv/bin/activate
+```
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 8. Running the Simulations
+
+The simulation scripts can be executed individually from the repository root.
+
+For example:
+
+```bash
+python simulations/detuning_comparison.py
+```
+
+To run the pulse-duration comparison:
+
+```bash
+python simulations/g2_pulse_duration_comparison.py
+```
+
+To run the detuning-dependent correlation analysis:
+
+```bash
+python simulations/g2_detuning_time_dependence.py
+```
+
+Generated figures are stored in the `figures/` directory.
+
+The exact available scripts can be inspected in the `simulations/` directory.
+
+---
+
+## 9. Limitations and Scope
+
+The present implementation focuses on a single two-level quantum emitter under coherent pulsed excitation.
+
+The model uses a Markovian master-equation description and does not explicitly include:
+
+- Multilevel emitter structure.
+- Multiple interacting emitters.
+- Non-Markovian environmental effects.
+- Spatial propagation of the optical field.
+- Detector response, timing jitter, or finite detection efficiency.
+- Experimental noise and background counts.
+
+The numerical results should therefore be interpreted within the assumptions and parameter ranges of the model.
+
+---
+
+## 10. Technologies
+
+- Python
+- NumPy
+- SciPy
+- QuTiP
+- Matplotlib
+- Git and GitHub
+
+---
+
+## 11. License
+
+This project is distributed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+## 12. Author
+
+**Mahdiyeh Ghasemi**
+
+Research interests:
+
+- Quantum Optics
+- Photon Statistics
+- Time-Resolved Photon Correlations
+- Quantum Dynamics
+- Computational Physics
